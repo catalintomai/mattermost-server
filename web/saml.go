@@ -5,6 +5,7 @@ package web
 
 import (
 	b64 "encoding/base64"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -52,6 +53,7 @@ func loginWithSaml(c *Context, w http.ResponseWriter, r *http.Request) {
 	}
 
 	if data, err := samlInterface.BuildRequest(relayState); err != nil {
+		mlog.Error(fmt.Sprintf("Failed to build request: %v", err.Error()))
 		c.Err = err
 		return
 	} else {
@@ -86,6 +88,7 @@ func completeSaml(c *Context, w http.ResponseWriter, r *http.Request) {
 
 	action := relayProps["action"]
 	if user, err := samlInterface.DoLogin(encodedXML, relayProps); err != nil {
+		mlog.Error(fmt.Sprintf("Failed to login user: %v", err.Error()))
 		if action == model.OAUTH_ACTION_MOBILE {
 			err.Translate(c.App.T)
 			w.Write([]byte(err.ToJson()))
