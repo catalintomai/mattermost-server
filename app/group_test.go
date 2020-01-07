@@ -213,7 +213,6 @@ func TestGetGroupsByChannel(t *testing.T) {
 	th := Setup(t).InitBasic()
 	defer th.TearDown()
 	group := th.CreateGroup()
-	group.SchemeAdmin = model.NewBool(false)
 
 	// Create a group channel
 	groupSyncable := &model.GroupSyncable{
@@ -236,7 +235,7 @@ func TestGetGroupsByChannel(t *testing.T) {
 
 	groups, _, err := th.App.GetGroupsByChannel(th.BasicChannel.Id, opts)
 	require.Nil(t, err)
-	require.ElementsMatch(t, []*model.Group{group}, groups)
+	require.ElementsMatch(t, []*model.GroupWithSchemeAdmin{{Group: *group, SchemeAdmin: model.NewBool(false)}}, groups)
 	require.NotNil(t, groups[0].SchemeAdmin)
 
 	groups, _, err = th.App.GetGroupsByChannel(model.NewId(), opts)
@@ -248,7 +247,6 @@ func TestGetGroupsByTeam(t *testing.T) {
 	th := Setup(t).InitBasic()
 	defer th.TearDown()
 	group := th.CreateGroup()
-	group.SchemeAdmin = model.NewBool(false)
 
 	// Create a group team
 	groupSyncable := &model.GroupSyncable{
@@ -264,7 +262,7 @@ func TestGetGroupsByTeam(t *testing.T) {
 
 	groups, _, err := th.App.GetGroupsByTeam(th.BasicTeam.Id, model.GroupSearchOpts{})
 	require.Nil(t, err)
-	require.ElementsMatch(t, []*model.Group{group}, groups)
+	require.ElementsMatch(t, []*model.GroupWithSchemeAdmin{{Group: *group, SchemeAdmin: model.NewBool(false)}}, groups)
 	require.NotNil(t, groups[0].SchemeAdmin)
 
 	groups, _, err = th.App.GetGroupsByTeam(model.NewId(), model.GroupSearchOpts{})
@@ -296,7 +294,7 @@ func TestUserIsInAdminRoleGroup(t *testing.T) {
 	require.Nil(t, err)
 	require.NotNil(t, g)
 
-	_, err = th.App.CreateGroupSyncable(&model.GroupSyncable{
+	_, err = th.App.UpsertGroupSyncable(&model.GroupSyncable{
 		GroupId:    group1.Id,
 		AutoAdd:    false,
 		SyncableId: th.BasicTeam.Id,
@@ -304,7 +302,7 @@ func TestUserIsInAdminRoleGroup(t *testing.T) {
 	})
 	require.Nil(t, err)
 
-	groupSyncable2, err := th.App.CreateGroupSyncable(&model.GroupSyncable{
+	groupSyncable2, err := th.App.UpsertGroupSyncable(&model.GroupSyncable{
 		GroupId:    group2.Id,
 		AutoAdd:    false,
 		SyncableId: th.BasicTeam.Id,
