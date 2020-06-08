@@ -40,6 +40,20 @@ type Customer struct {
 	Company string `json:"company"`
 }
 
+type TrialLicenseRequest struct {
+	ServerID string `json:"server_id"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	SiteURL  string `json:"site_url"`
+	SiteName string `json:"site_name"`
+	Users    int    `json:"users"`
+}
+
+func (tlr *TrialLicenseRequest) ToJson() string {
+	b, _ := json.Marshal(tlr)
+	return string(b)
+}
+
 type Features struct {
 	Users                     *int  `json:"users"`
 	LDAP                      *bool `json:"ldap"`
@@ -64,6 +78,7 @@ type Features struct {
 	GuestAccountsPermissions  *bool `json:"guest_accounts_permissions"`
 	IDLoadedPushNotifications *bool `json:"id_loaded"`
 	LockTeammateNameDisplay   *bool `json:"lock_teammate_name_display"`
+	EnterprisePlugins         *bool `json:"enterprise_plugins"`
 
 	// after we enabled more features we'll need to control them with this
 	FutureFeatures *bool `json:"future_features"`
@@ -90,6 +105,7 @@ func (f *Features) ToMap() map[string]interface{} {
 		"guest_accounts_permissions":  *f.GuestAccountsPermissions,
 		"id_loaded":                   *f.IDLoadedPushNotifications,
 		"lock_teammate_name_display":  *f.LockTeammateNameDisplay,
+		"enterprise_plugins":          *f.EnterprisePlugins,
 		"future":                      *f.FutureFeatures,
 	}
 }
@@ -190,6 +206,10 @@ func (f *Features) SetDefaults() {
 	if f.LockTeammateNameDisplay == nil {
 		f.LockTeammateNameDisplay = NewBool(*f.FutureFeatures)
 	}
+
+	if f.EnterprisePlugins == nil {
+		f.EnterprisePlugins = NewBool(*f.FutureFeatures)
+	}
 }
 
 func (l *License) IsExpired() bool {
@@ -236,7 +256,7 @@ func LicenseFromJson(data io.Reader) *License {
 }
 
 func (lr *LicenseRecord) IsValid() *AppError {
-	if len(lr.Id) != 26 {
+	if !IsValidId(lr.Id) {
 		return NewAppError("LicenseRecord.IsValid", "model.license_record.is_valid.id.app_error", nil, "", http.StatusBadRequest)
 	}
 

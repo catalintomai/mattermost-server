@@ -18,7 +18,9 @@ import (
 )
 
 const (
-	CURRENT_SCHEMA_VERSION   = VERSION_5_22_0
+	CURRENT_SCHEMA_VERSION   = VERSION_5_24_0
+	VERSION_5_24_0           = "5.24.0"
+	VERSION_5_23_0           = "5.23.0"
 	VERSION_5_22_0           = "5.22.0"
 	VERSION_5_21_0           = "5.21.0"
 	VERSION_5_20_0           = "5.20.0"
@@ -787,19 +789,17 @@ func upgradeDatabaseToVersion522(sqlStore SqlStore) {
 }
 
 func upgradeDatabaseToVersion523(sqlStore SqlStore) {
-	// TODO: uncomment when the time arrive to upgrade the DB for 5.23
-	// if shouldPerformUpgrade(sqlStore, VERSION_5_22_0, VERSION_5_23_0) {
-
-	// 	saveSchemaVersion(sqlStore, VERSION_5_23_0)
-	// }
+	if shouldPerformUpgrade(sqlStore, VERSION_5_22_0, VERSION_5_23_0) {
+		saveSchemaVersion(sqlStore, VERSION_5_23_0)
+	}
 }
 
 func upgradeDatabaseToVersion524(sqlStore SqlStore) {
-	// TODO: uncomment when the time arrive to upgrade the DB for 5.24
-	// if shouldPerformUpgrade(sqlStore, VERSION_5_23_0, VERSION_5_24_0) {
+	if shouldPerformUpgrade(sqlStore, VERSION_5_23_0, VERSION_5_24_0) {
+		sqlStore.CreateColumnIfNotExists("UserGroups", "AllowReference", "boolean", "boolean", "0")
+		sqlStore.GetMaster().Exec("UPDATE UserGroups SET Name = null, AllowReference = false")
+		sqlStore.AlterPrimaryKey("Reactions", []string{"PostId", "UserId", "EmojiName"})
 
-	sqlStore.CreateColumnIfNotExists("UserGroups", "AllowReference", "boolean", "boolean", "0")
-
-	// 	saveSchemaVersion(sqlStore, VERSION_5_24_0)
-	// }
+		saveSchemaVersion(sqlStore, VERSION_5_24_0)
+	}
 }
