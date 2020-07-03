@@ -10,16 +10,18 @@ import (
 )
 
 const (
-	SYSTEM_DIAGNOSTIC_ID                  = "DiagnosticId"
-	SYSTEM_RAN_UNIT_TESTS                 = "RanUnitTests"
-	SYSTEM_LAST_SECURITY_TIME             = "LastSecurityTime"
-	SYSTEM_ACTIVE_LICENSE_ID              = "ActiveLicenseId"
-	SYSTEM_LAST_COMPLIANCE_TIME           = "LastComplianceTime"
-	SYSTEM_ASYMMETRIC_SIGNING_KEY         = "AsymmetricSigningKey"
-	SYSTEM_POST_ACTION_COOKIE_SECRET      = "PostActionCookieSecret"
-	SYSTEM_INSTALLATION_DATE_KEY          = "InstallationDate"
-	SYSTEM_FIRST_SERVER_RUN_TIMESTAMP_KEY = "FirstServerRunTimestamp"
-	SYSTEM_CLUSTER_ENCRYPTION_KEY         = "ClusterEncryptionKey"
+	SYSTEM_DIAGNOSTIC_ID                       = "DiagnosticId"
+	SYSTEM_RAN_UNIT_TESTS                      = "RanUnitTests"
+	SYSTEM_LAST_SECURITY_TIME                  = "LastSecurityTime"
+	SYSTEM_ACTIVE_LICENSE_ID                   = "ActiveLicenseId"
+	SYSTEM_LAST_COMPLIANCE_TIME                = "LastComplianceTime"
+	SYSTEM_ASYMMETRIC_SIGNING_KEY              = "AsymmetricSigningKey"
+	SYSTEM_POST_ACTION_COOKIE_SECRET           = "PostActionCookieSecret"
+	SYSTEM_INSTALLATION_DATE_KEY               = "InstallationDate"
+	SYSTEM_FIRST_SERVER_RUN_TIMESTAMP_KEY      = "FirstServerRunTimestamp"
+	SYSTEM_CLUSTER_ENCRYPTION_KEY              = "ClusterEncryptionKey"
+	SYSTEM_LAST_REPORT_AWS_METER_TIMESTAMP_KEY = "LastReportAWSMeterTimestamp"
+	AWS_METERING_REPORT_INTERVAL               = 3
 )
 
 type System struct {

@@ -3991,6 +3991,10 @@
     "translation": "Failed to parse installation date."
   },
   {
+    "id": "app.last_report_aws_meter_date.parse_int.app_error",
+    "translation": "Failed to parse date of last report sent to AWS Metering."
+  },
+  {
     "id": "app.team.invite_id.group_constrained.error",
     "translation": "Unable to join a group-constrained team by invite."
   },

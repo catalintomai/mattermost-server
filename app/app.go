@@ -107,6 +107,10 @@ func (a *App) InitServer() {
 		if a.Srv().runjobs {
 			a.Srv().Go(func() {
 				runLicenseExpirationCheckJob(a)
+
+				if model.BuildAMIReady == "true" {
+					runReportToAWSMeterJob(a)
+				}
 			})
 		}
 		a.srv.RunJobs()

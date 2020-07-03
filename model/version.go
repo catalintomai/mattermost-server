@@ -86,6 +86,7 @@ var BuildDate string
 var BuildHash string
 var BuildHashEnterprise string
 var BuildEnterpriseReady string
+var BuildAMIReady string
 var versionsWithoutHotFixes []string
 
 func init() {

@@ -10,6 +10,15 @@ else
 	env GOOS=linux GOARCH=amd64 $(GO) build -o $(GOBIN)/linux_amd64 $(GOFLAGS) -trimpath -ldflags '$(LDFLAGS)' ./...
 endif
 
+build-linux-ami:
+	@echo Build Linux amd64
+ifeq ($(BUILDER_GOOS_GOARCH),"linux_amd64")
+	env GOOS=linux GOARCH=amd64 $(GO) build -o $(GOBIN) $(GOFLAGS) -trimpath -ldflags '$(LDFLAGS) -X "github.com/mattermost/mattermost-server/v5/model.BuildAMIReady=true"' ./...
+else
+	mkdir -p $(GOBIN)/linux_amd64
+	env GOOS=linux GOARCH=amd64 $(GO) build -o $(GOBIN)/linux_amd64 $(GOFLAGS) -trimpath -ldflags '$(LDFLAGS) -X "github.com/mattermost/mattermost-server/v5/model.BuildAMIReady=true"' ./...
+endif
+
 build-osx:
 	@echo Build OSX amd64
 ifeq ($(BUILDER_GOOS_GOARCH),"darwin_amd64")

@@ -1011,6 +1011,27 @@ func runLicenseExpirationCheckJob(a *App) {
 	}, time.Hour*24)
 }
 
+func runReportToAWSMeterJob(a *App) {
+	model.CreateRecurringTask("Collect and send usage report to AWS Metering Service", func() {
+		doReportUsageToAWSMeteringService(a)
+	}, time.Hour*1) // Hour*1, CITOMAI - from the moment the server starts
+}
+
+func doReportUsageToAWSMeteringService(a *App) {
+	mlog.Info("CITOMAI::doReportUsageToAWSMeteringService")
+
+	awsSvc, err := a.NewAWSMeterService()
+	if err != nil {
+		mlog.Error("Cannot obtain instance of AWS Metering Service.", mlog.Err(err))
+		return
+	}
+
+	dimensions := []string{"UsageHrs"}
+	reports := a.GetUserCategoryUsage(dimensions, time.Now().UTC(), time.Now().Add(-1*time.Hour).UTC())
+
+	a.ReportUserCategoryUsage(awsSvc, reports)
+}
+
 func doSecurity(s *Server) {
 	s.DoSecurityUpdateCheck()
 }
