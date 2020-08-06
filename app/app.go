@@ -104,7 +104,7 @@ func (a *App) InitServer() {
 			a.Srv().Go(func() {
 				runLicenseExpirationCheckJob(a)
 
-				if model.BuildAMIReady == "true" {
+				if *a.Config().ServiceSettings.EnableAWSMetering {
 					runReportToAWSMeterJob(a)
 				}
 				runCheckNumberOfActiveUsersWarnMetricStatusJob(a)
